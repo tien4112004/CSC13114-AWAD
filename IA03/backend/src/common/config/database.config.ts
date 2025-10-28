@@ -13,6 +13,10 @@ export default registerAs('database', () => {
 
   const url = new URL(String(databaseUrl));
 
+  // Determine if SSL is required based on the hostname or explicit sslmode parameter
+  const isRemoteDB = !['localhost', '127.0.0.1'].includes(url.hostname);
+  const sslMode = url.searchParams.get('sslmode');
+
   return {
     host: url.hostname,
     port: parseInt(url.port || '5432', 10),
@@ -20,5 +24,6 @@ export default registerAs('database', () => {
     password: url.password || 'postgres',
     database: url.pathname.substring(1) || 'user',
     type: 'postgres' as const,
+    ssl: isRemoteDB || sslMode === 'require' ? { rejectUnauthorized: false } : false,
   };
 });

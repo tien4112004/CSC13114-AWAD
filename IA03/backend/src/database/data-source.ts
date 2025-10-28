@@ -11,6 +11,10 @@ if (!databaseUrl) {
 
 const url = new URL(databaseUrl);
 
+// Determine if SSL is required based on the hostname or explicit sslmode parameter
+const isRemoteDB = !['localhost', '127.0.0.1'].includes(url.hostname);
+const sslMode = url.searchParams.get('sslmode');
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: url.hostname,
@@ -22,6 +26,7 @@ export const AppDataSource = new DataSource({
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,
   logging: true,
+  ssl: isRemoteDB || sslMode === 'require' ? { rejectUnauthorized: false } : false,
   extra: {
     family: 4,
   },
