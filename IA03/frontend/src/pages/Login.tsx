@@ -1,32 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Card } from "../components/ui/Card";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
+import { useLogin } from "../hooks/useAuth";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
+const loginSchema = z.object({
+  email: z.email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export const Login: React.FC = () => {
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  const loginMutation = useLogin();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>();
+    setError,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const onSubmit = (data: LoginFormData) => {
-    // Mock login - just show success message
-    console.log("Login attempt with:", data);
-    setLoginSuccess(true);
-
-    // Reset success message after 3 seconds
-    setTimeout(() => {
-      setLoginSuccess(false);
-    }, 3000);
+    loginMutation.mutate(data, {
+      onSuccess: () => {
+        navigate(from, { replace: true });
+      },
+      onError: (error: unknown) => {
+        const message =
+          (error as { response?: { data?: { message?: string } } })?.response
+            ?.data?.message || "Login failed";
+        setError("root", { message });
+      },
+    });
   };
 
   return (
@@ -40,40 +56,13 @@ export const Login: React.FC = () => {
         </div>
 
         <Card>
-          {loginSuccess && (
-            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <div className="flex items-center">
-                <svg
-                  className="w-5 h-5 text-green-600 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="text-sm text-green-800 font-medium">
-                  Login successful! (Demo mode)
-                </p>
-              </div>
-            </div>
-          )}
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email"
               type="email"
               placeholder="Enter your email"
               error={errors.email?.message}
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
-                },
-              })}
+              {...register("email")}
             />
 
             <Input
@@ -81,14 +70,14 @@ export const Login: React.FC = () => {
               type="password"
               placeholder="Enter your password"
               error={errors.password?.message}
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-              })}
+              {...register("password")}
             />
+
+            {errors.root && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-800">{errors.root.message}</p>
+              </div>
+            )}
 
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center">
@@ -103,8 +92,13 @@ export const Login: React.FC = () => {
               </a>
             </div>
 
-            <Button type="submit" variant="primary" className="w-full">
-              Sign In
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
@@ -120,13 +114,6 @@ export const Login: React.FC = () => {
             </p>
           </div>
         </Card>
-
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">
-            Note: This is a demo login page. No actual authentication is
-            performed.
-          </p>
-        </div>
       </div>
     </div>
   );

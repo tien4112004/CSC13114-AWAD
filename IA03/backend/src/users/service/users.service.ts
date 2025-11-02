@@ -21,7 +21,9 @@ export class UsersService {
 
     this.logger.log(`Attempting to register user: ${email}`);
 
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       this.logger.warn(`Registration failed: User ${email} already exists`);
       throw new ConflictException(`User [${email}] already exists`);
@@ -37,5 +39,9 @@ export class UsersService {
       this.logger.error(`Registration failed for ${email}: ${error.message}`);
       throw error;
     }
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
   }
 }
