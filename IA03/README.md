@@ -5,12 +5,14 @@ A complete React single-page application implementing secure authentication usin
 ## Features
 
 ### Authentication Flow
+
 - User registration and login
 - JWT access and refresh token management
 - Automatic token refresh on expiration
 - Secure logout with token invalidation
 
 ### Frontend Technologies
+
 - **React** - UI framework
 - **React Hook Form** - Form handling and validation
 - **React Query** - Server state management
@@ -20,6 +22,7 @@ A complete React single-page application implementing secure authentication usin
 - **Tailwind CSS** - Styling
 
 ### Backend Technologies
+
 - **NestJS** - Node.js framework
 - **TypeORM** - Database ORM
 - **JWT** - Token-based authentication
@@ -51,6 +54,7 @@ A complete React single-page application implementing secure authentication usin
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - npm or yarn
 - PostgreSQL (or your preferred database)
@@ -58,18 +62,21 @@ A complete React single-page application implementing secure authentication usin
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd CSC13114-AWAD
    ```
 
 2. **Backend Setup**
+
    ```bash
    cd backend
    npm install
    ```
 
    Create a `.env` file in the backend directory:
+
    ```env
    DATABASE_HOST=localhost
    DATABASE_PORT=5432
@@ -84,18 +91,21 @@ A complete React single-page application implementing secure authentication usin
    ```
 
    Run database migrations:
+
    ```bash
    npm run build
    npm run migration:run
    ```
 
 3. **Frontend Setup**
+
    ```bash
    cd ../frontend
    npm install
    ```
 
    Create a `.env` file in the frontend directory:
+
    ```env
    VITE_API_BASE_URL=http://localhost:3000
    ```
@@ -103,10 +113,12 @@ A complete React single-page application implementing secure authentication usin
 ### Running the Application
 
 1. **Start the backend server**
+
    ```bash
    cd backend
    npm run start:dev
    ```
+
    The API server will be available at `http://localhost:3000`
 
 2. **Start the frontend application**
@@ -119,12 +131,14 @@ A complete React single-page application implementing secure authentication usin
 ## API Endpoints
 
 ### Authentication
+
 - `POST /auth/login` - User login
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/logout` - User logout
 - `GET /auth/profile` - Get user profile (protected)
 
 ### User Management
+
 - `POST /user/register` - User registration
 
 ## Authentication Flow
@@ -150,7 +164,9 @@ A complete React single-page application implementing secure authentication usin
 ## Deployment
 
 ### Backend Deployment
+
 The backend can be deployed to any Node.js hosting platform:
+
 - Vercel
 - Railway
 - Render
@@ -158,13 +174,16 @@ The backend can be deployed to any Node.js hosting platform:
 - AWS/GCP/Azure
 
 ### Frontend Deployment
+
 The frontend is configured for static hosting:
+
 - **Vercel** (recommended)
 - **Netlify**
 - **GitHub Pages**
 - **Firebase Hosting**
 
 ### Environment Variables for Production
+
 ```env
 # Backend
 DATABASE_URL=your_production_database_url
@@ -180,18 +199,21 @@ VITE_API_BASE_URL=https://your-api-domain.com
 ### Available Scripts
 
 **Backend:**
+
 - `npm run start` - Production mode
 - `npm run start:dev` - Development mode with hot reload
 - `npm run build` - Build for production
 - `npm run test` - Run tests
 
 **Frontend:**
+
 - `npm run dev` - Development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
 ### Code Quality
+
 - TypeScript for type safety
 - ESLint for code linting
 - Prettier for code formatting (recommended)
@@ -199,6 +221,7 @@ VITE_API_BASE_URL=https://your-api-domain.com
 ## Testing
 
 ### Manual Testing
+
 1. Register a new user account
 2. Login with the created credentials
 3. Access protected dashboard
@@ -206,7 +229,9 @@ VITE_API_BASE_URL=https://your-api-domain.com
 5. Test logout functionality
 
 ### API Testing
+
 Use tools like Postman or Insomnia to test API endpoints:
+
 - Register endpoint
 - Login endpoint (returns tokens)
 - Profile endpoint (requires Bearer token)
@@ -227,31 +252,37 @@ This project is licensed under the MIT License.
 ## Evaluation Criteria Met
 
 - ✅ **Authentication logic and correctness (30%)**
+
   - JWT access and refresh token implementation
   - Secure token storage and management
   - Proper authentication flow
 
 - ✅ **Axios interceptor setup (20%)**
+
   - Request interceptor for token attachment
   - Response interceptor for automatic token refresh
   - 401 error handling
 
 - ✅ **React Query integration (15%)**
+
   - useMutation for login/logout
   - useQuery for user profile
   - Query invalidation on auth state changes
 
 - ✅ **React Hook Form integration (10%)**
+
   - Form validation with Zod schema
   - Error handling and display
   - Form submission with React Query
 
 - ✅ **Public hosting and deployment (10%)**
+
   - Ready for deployment to Vercel/Netlify
   - Environment configuration
   - Production build setup
 
 - ✅ **UI and UX (10%)**
+
   - Clean, modern interface
   - Responsive design
   - Loading states and error messages
@@ -267,6 +298,7 @@ This project is licensed under the MIT License.
 - [ ] **Cookie storage**: Use HTTP-only cookies for refresh tokens
 - [ ] **Multi-tab sync**: Logout reflects across browser tabs
 - [ ] **Role-based access**: Different user roles and permissions
+
 ```
 
 Frontend runs on `http://localhost:5173`
@@ -277,3 +309,4 @@ For detailed documentation, see:
 
 - [Backend README](./backend/README.md)
 - [Frontend README](./frontend/README.md)
+```

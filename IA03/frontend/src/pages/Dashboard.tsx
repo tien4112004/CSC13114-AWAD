@@ -82,7 +82,7 @@ export const Dashboard: React.FC = () => {
                 <label className="text-sm font-medium text-gray-700">
                   User ID
                 </label>
-                <p className="text-gray-900 font-mono text-sm">{user.id}</p>
+                <p className="text-gray-900 font-mono text-sm">{user.userId}</p>
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700">

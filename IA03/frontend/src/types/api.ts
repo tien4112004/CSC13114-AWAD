@@ -34,7 +34,7 @@ export interface RefreshTokenResponse {
 }
 
 export interface UserProfile {
-  id: string;
+  userId: string;
   email: string;
   createdAt: string;
 }
